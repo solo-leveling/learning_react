@@ -1,58 +1,67 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-class Item extends React.Component{
-  render() {
-    return (
-      <li>
-         {this.props.name}, ${this.props.price}
-      </li>
-    )
-  }
-}
+// class Item extends React.Component{
+//   render() {
+//     return (
+//       <li>
+//          {this.props.name}, ${this.props.price}
+//       </li>
+//     )
+//   }
+// }
+const Item = ({id, name, price}) => (
+  <li>
+    {id}: {name}, ${price}
+  </li>
+)
 
-class App extends React.Component{
+const App = props => {
 
-  state = {
-    items: [
-        { id: 1, name: "Apple", price: 0.99 },
-        { id: 2, name: "Orange", price: 0.99}
-      ]
-    }
-  nameRef = React.createRef();
-  priceRef = React.createRef();
+  // state = {
+  //   items: [
+  //       { id: 1, name: "Apple", price: 0.99 },
+  //       { id: 2, name: "Orange", price: 0.99}
+  //     ]
+  //   }
 
-  add = () => {
+  let[items, setItems] = useState([
+    { id: 1, name: "Apple", price: 0.99},
+    { id: 2, name: "Orange", price: 0.98}
+  ]); 
+
+  let nameRef = React.createRef();
+  let priceRef = React.createRef();
+
+  let add = () => {
      
-      let name = this.nameRef.current.value;
-      let price = this.priceRef.current.value;
+      let name = nameRef.current.value;
+      let price = priceRef.current.value;
     if (name !== "" && price !== "") {
-    let id = this.state.items.length + 1;
-    this.setState({
-        items: [
-          ...this.state.items,
-          { id, name, price}
-        ]
-    })
+    let id = items.length + 1;
+      setItems([
+        ...items,
+        { id, name, price }
+      ]);
   }
-      this.nameRef.current.value = "";
-      this.priceRef.current.value = "";
+      nameRef.current.value = "";
+      priceRef.current.value = "";
     }
   
-  render() {
+  
     return (
       <div>
         <h1>Hello</h1>
         <ul>
           {this.state.items.map(i => {
-            return <Item key= { i.id } name= { i.name } price= { i.price } />
+            return <Item key= { i.id } id={i.id} name= { i.name } price= { i.price } />
           })}
         </ul>
-        <input type='text' ref={this.nameRef} /><br />
-        <input type='text' ref={this.priceRef} /><br />
-        <button onClick={ this.add }>Add</button>
+        <input type='text' ref={nameRef} /><br />
+        <input type='text' ref={priceRef} /><br />
+        <button onClick={ add }>Add</button>
       </div>
     )
   }
-}
+
 
 export default App;
